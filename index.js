@@ -1,17 +1,23 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
+const { MinecraftServer } = require('./MinecraftServer.js');
+
 
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
-const eventsPath = path.join(__dirname, 'events');
-const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
+const eventsPathDiscord = path.join(__dirname, 'events/discord');
+const eventFilesDiscord = fs.readdirSync(eventsPathDiscord).filter(file => file.endsWith('.js'));
+const eventsPathMCServer = path.join(__dirname, 'events/mcserver');
+const eventFilesMCServer = fs.readdirSync(eventsPathMCServer).filter(file => file.endsWith('.js'));
 
 // Config & env variable stuff
 require('dotenv').config();
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
 client.commands = new Collection();
+client.minecraftServer = new MinecraftServer('java @user_jvm_args.txt @libraries/net/minecraftforge/forge/1.19.2-43.2.0/win_args.txt --nogui %*', 
+                                            __dirname + '/server', '[Server thread/INFO] [minecraft/DedicatedServer]: Done');
 
 // Load Commands
 for (const file of commandFiles) {
@@ -25,9 +31,9 @@ for (const file of commandFiles) {
     }
 }
 
-// Load Events
-for (const file of eventFiles) {
-	const filePath = path.join(eventsPath, file);
+// Load Client Events
+for (const file of eventFilesDiscord) {
+	const filePath = path.join(eventsPathDiscord, file);
 	const event = require(filePath);
 	if (event.once) {
 		client.once(event.name, (...args) => event.execute(...args));
@@ -36,45 +42,15 @@ for (const file of eventFiles) {
 	}
 }
 
-
-
-
-// client.on('ready', () => {
-//   console.log(`Logged in as ${client.user.tag}!`);
-// });
-
-// client.on("messageCreate", message => {
-//     if (message.author.bot) return
-//     if (message.channelId === config.DeveloperChannel) return handleDevMessage(message);
-//     if (message.channelId === config.ChatChannel) return handleChatMessage(message);
-// });
-
-// client.on('interactionCreate', async interaction => {
-//     if (!interaction.isChatInputCommand()) return;
-
-//     const command = interaction.client.commands.get(interaction.commandName);
-
-//     if (!command) return console.error(`No command matching ${interaction.commandName} was found.`);
-
-//     try {
-//         await command.execute(interaction);
-//     } catch (error) {
-//         console.error(error);
-//         let embed = new EmbedBuilder()
-//             .setColor(0xff0000)
-//             .setTitle('❌ Error ❌')
-//             .setDescription('There was an error while executing the command... 😰');
-//         await interaction.reply({ embeds: [embed] });
-//     }
-// });
-
-function handleDevMessage(message) {
-    console.log(message.content);
+// Load MC Server Events
+for (const file of eventFilesMCServer) {
+	const filePath = path.join(eventsPathMCServer, file);
+	const event = require(filePath);
+	if (event.once) {
+		client.minecraftServer.once(event.name, (...args) => event.execute(client, ...args));
+	} else {
+		client.minecraftServer.on(event.name, (...args) => event.execute(client, ...args));
+	}
 }
-
-function handleChatMessage(message) {
-    console.log(message.content);
-}
-
 
 client.login(process.env.TOKEN);
