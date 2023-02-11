@@ -17,7 +17,7 @@ require('dotenv').config();
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
 client.commands = new Collection();
 client.minecraftServer = new MinecraftServer('java @user_jvm_args.txt @libraries/net/minecraftforge/forge/1.19.2-43.2.0/win_args.txt --nogui %*', 
-                                            __dirname + '/server', '[Server thread/INFO] [minecraft/DedicatedServer]: Done');
+                                            __dirname + '\\server', '[Server thread/INFO] [minecraft/DedicatedServer]: Done');
 
 // Load Commands
 for (const file of commandFiles) {

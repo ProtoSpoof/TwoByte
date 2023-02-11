@@ -20,7 +20,10 @@
   },
   "homepage": "https://github.com/ProtoSpoof/TwoByte#readme",
   "dependencies": {
+    "cross-zip": "^4.0.0",
     "discord.js": "^14.7.1",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "node-cron": "^3.0.2",
+    "zip-lib": "^0.7.3"
   }
 }
