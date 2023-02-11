@@ -1,4 +1,4 @@
-const { SERVER_COMMAND, SERVER_DIRECTORY, SERVER_READY_MESSAGE} = require('config.js');
+const { SERVER_COMMAND, SERVER_DIRECTORY, SERVER_READY_MESSAGE} = require('./config.js');
 const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const { MinecraftServer } = require('./MinecraftServer.js');
 const path = require('node:path');
