@@ -10,7 +10,6 @@ module.exports = {
             .setDescription('It looks like the server is ready to go!');
         await client.chatChannel?.send({ embeds: [embed] });
         process.stdin.on('data', (data) => {
-            if (!client.minecraftServer.ready) return;
             client.minecraftServer.serverProcess?.stdin.emit('data', data);
         })
 	},

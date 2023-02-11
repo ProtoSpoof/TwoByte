@@ -1,6 +1,6 @@
 const fs = require('node:fs');
 const { EmbedBuilder, SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
-const { Settings, SettingsPath } = require('../config.js');
+const { SETTINGS, SETTINGS_PATH } = require('../config.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -22,18 +22,18 @@ module.exports = {
         let embed = new EmbedBuilder().setColor(0xfbf9b9);
         
         if (type === 'channel_developer') {
-            Settings.DEVELOPER_CHANNEL = interaction.channelId;
-            interaction.client.developerChannel = interaction.client.channels.cache.get(Settings.DEVELOPER_CHANNEL);
+            SETTINGS.DEVELOPER_CHANNEL = interaction.channelId;
+            interaction.client.developerChannel = interaction.client.channels.cache.get(SETTINGS.DEVELOPER_CHANNEL);
             embed.setTitle('👨‍💻 Developer Channel Set!')
                 .setDescription('You will now recieve developer messages in this channel!');
         } else {
-            Settings.CHAT_CHANNEL = interaction.channelId;
-            interaction.client.chatChannel = interaction.client.channels.cache.get(Settings.CHAT_CHANNEL);
+            SETTINGS.CHAT_CHANNEL = interaction.channelId;
+            interaction.client.chatChannel = interaction.client.channels.cache.get(SETTINGS.CHAT_CHANNEL);
             embed.setTitle('🗣 Chat Channel Set!')
                 .setDescription('You will now recieve chat messages in this channel!');
         }
 
-        fs.writeFile(SettingsPath, JSON.stringify(Settings), err => {
+        fs.writeFile(SETTINGS_PATH, JSON.stringify(SETTINGS), err => {
             if (err) return console.log(err);
         });
 
