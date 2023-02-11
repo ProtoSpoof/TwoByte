@@ -1,5 +1,5 @@
 const fs = require('node:fs');
-const { EmbedBuilder, SlashCommandBuilder } = require("discord.js");
+const { EmbedBuilder, SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
 const { Settings, SettingsPath } = require('../config.js');
 
 module.exports = {
@@ -13,18 +13,22 @@ module.exports = {
                 .addChoices(
                     { name: 'Developer', value: 'channel_developer' },
                     { name: 'Chat', value: 'channel_chat' },
-                )),
+                ))
+        .setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
+        .setDMPermission(false),
     async execute(interaction) {
         let type = interaction.options.getString('type');
 
         let embed = new EmbedBuilder().setColor(0xfbf9b9);
         
         if (type === 'channel_developer') {
-            Settings.DeveloperChannel = interaction.channelId;
+            Settings.DEVELOPER_CHANNEL = interaction.channelId;
+            interaction.client.developerChannel = interaction.client.channels.cache.get(Settings.DEVELOPER_CHANNEL);
             embed.setTitle('👨‍💻 Developer Channel Set!')
                 .setDescription('You will now recieve developer messages in this channel!');
         } else {
-            Settings.ChatChannel = interaction.channelId;
+            Settings.CHAT_CHANNEL = interaction.channelId;
+            interaction.client.chatChannel = interaction.client.channels.cache.get(Settings.CHAT_CHANNEL);
             embed.setTitle('🗣 Chat Channel Set!')
                 .setDescription('You will now recieve chat messages in this channel!');
         }
