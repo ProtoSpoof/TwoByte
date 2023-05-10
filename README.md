@@ -18,8 +18,8 @@ This project assumes you already have a discord application setup. If you do not
 
 3. Update config.js
 ```bash
-  SERVER_PATH: __dirname + '/server',
-  SERVER_COMMAND: 'java @user_jvm_args.txt @libraries/net/minecraftforge/forge/1.19.2-43.2.0/unix_args.txt --nogui "$@"',
+  SERVER_PATH: [Path to Minecraft Server],
+  SERVER_COMMAND: [Command to start Minecraft Server],
   SERVER_READY_MESSAGE: [message emitted when server ready],
 ```
 
