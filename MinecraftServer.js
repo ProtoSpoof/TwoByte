@@ -1,12 +1,9 @@
 const { spawn } = require('node:child_process');
 const { EventEmitter } = require('node:events');
-const { EmbedBuilder } = require('discord.js');
-const { ServerPath, Settings } = require('./config.js');
 const zl = require('zip-lib');
 const cron = require('node-cron');
 
-class MinecraftServer extends EventEmitter {    
-
+class MinecraftServer extends EventEmitter {
     constructor(executionCommand, serverPath = './server', readyText = '[Server thread/INFO]: Done') {
         super();
         this.executionCommand = executionCommand;
@@ -15,11 +12,11 @@ class MinecraftServer extends EventEmitter {
         this.serverProcess = null;
         this.started = false;
         this.ready = false;
-        cron.schedule('0 0 0 * * *', () => {
+        cron.schedule('0 12 15 * * *', () => {
             try {
-                this.backup_server();
+                this.backup_server(48);
             } catch (error) {
-                console.log(error);  
+                console.log(error);
             }
         })
     }
@@ -69,15 +66,30 @@ class MinecraftServer extends EventEmitter {
         this.serverProcess?.stdin.emit('data', command + '\n');
     }
 
-    async backup_server() {
+    async backup_server(delayMinutes = 0) {
         if (!this.started) return console.log(new Error('Server Not Started'));
-        
+
+        if (delayMinutes >= 1) {
+            this.send_command(`/say The server will backup in ${delayMinutes} minutes.`);
+            while (delayMinutes > 1) {
+                delayMinutes /= 2;
+                await new Promise(resolve => setTimeout(resolve, delayMinutes * 60000));
+                this.send_command(`/say The server will backup in ${delayMinutes} minutes.`);
+            }
+            await new Promise(resolve => setTimeout(resolve, delayMinutes * 60000));
+        }
+
+        this.send_command('/say The server is backing up');
         this.stop_server();
         this.once('exit', () => {
             let now = new Date();
             zl.archiveFolder(this.serverPath + '/world', this.serverPath + `/backups/${now.toISOString().replaceAll(':', '-')}.zip`);
             this.start_server();
         });
+    }
+
+    async whitelist_user() {
+
     }
 
 }

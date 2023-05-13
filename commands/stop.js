@@ -1,6 +1,5 @@
 const { EmbedBuilder, SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
 
-
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('stop')
@@ -12,9 +11,8 @@ module.exports = {
             .setColor(0x8BD3E6)
             .setTitle('🛑 Stopping Server...')
             .setDescription('Give me a second to stop everything!');
-        
+
         await interaction.reply({ embeds: [embed] });
-   
         interaction.client.minecraftServer.stop_server();
     },
 };

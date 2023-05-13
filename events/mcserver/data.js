@@ -1,29 +1,29 @@
 const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
-	name: 'data',
-	once: false,
-	async execute(client, data) {
-		console.log(data = data.toString());
+    name: 'data',
+    once: false,
+    async execute(client, data) {
+        console.log(data = data.toString());
         let tokens = data.split('\n');
-    
+
         tokens.forEach(token => {
             token = token.substring(token.indexOf(']') + 2);
             let tokenType = token.substring(0, token.indexOf(':'));
             let tokenContent = token.substring(token.indexOf(':') + 2);
             if (tokenContent.length > 2000) tokenContent = tokenContent.substring(0, 1999) + '...';
-            
+
             if (!client.minecraftServer.ready) return;
 
             let embed = new EmbedBuilder();
-        
+
             if (isCommandChatData(tokenContent)) {
                 return client.developerChannel?.send(token);
             }
-            
+
             // We only care about server info that has this type (generally)
             if (!tokenType.includes('[Server thread/INFO] [minecraft/')) return;
-            
+
             // These are always chat messages sent by players always send these to discord
             if (tokenContent.charAt(0) == '<') {
                 let username = tokenContent.substring(1, tokenContent.indexOf('>'));
@@ -38,9 +38,8 @@ module.exports = {
             embed.setColor(0xB1A2CA).setDescription(tokenContent)
             return client.chatChannel?.send({embeds: [embed]});
         });
-	},
+    },
 };
-
 
 function isCommandChatData(dataContent) {
     // Empty server
@@ -66,5 +65,4 @@ function isCommandChatData(dataContent) {
     // Ignore unknown commands
     if (dataContent.startsWith('Unknown or incomplete command')) return true;
     if (dataContent.startsWith('<') && !dataContent.includes('>')) return true;
-
 }

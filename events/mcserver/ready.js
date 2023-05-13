@@ -1,9 +1,9 @@
 const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
-	name: 'ready',
-	once: false,
-	async execute(client) {
+    name: 'ready',
+    once: false,
+    async execute(client) {
         let embed = new EmbedBuilder()
             .setColor(0xB5F1CC)
             .setTitle('😄 Server Ready...')
@@ -12,5 +12,5 @@ module.exports = {
         process.stdin.on('data', (data) => {
             client.minecraftServer.serverProcess?.stdin.emit('data', data);
         })
-	},
+    },
 };

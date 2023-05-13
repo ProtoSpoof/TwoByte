@@ -18,9 +18,8 @@ module.exports = {
         .setDMPermission(false),
     async execute(interaction) {
         let type = interaction.options.getString('type');
-
         let embed = new EmbedBuilder().setColor(0xfbf9b9);
-        
+
         if (type === 'channel_developer') {
             SETTINGS.DEVELOPER_CHANNEL = interaction.channelId;
             interaction.client.developerChannel = interaction.client.channels.cache.get(SETTINGS.DEVELOPER_CHANNEL);
@@ -40,29 +39,3 @@ module.exports = {
         await interaction.reply({ embeds: [embed] });
     },
 };
-
-
-// if (interaction.commandName === 'setdevchannel') {
-        // config.DeveloperChannel = interaction.channelId;
-        // fs.writeFile(configPath, JSON.stringify(config), err => {
-        //     if (err) return console.log(err);
-        // });
-
-    //     let embed = new EmbedBuilder()
-    //         .setColor(0xfbf9b9)
-    //         .setTitle('Developer Channel Set!')
-    //         .setDescription('You will now recieve logs in this channel!');
-    //     await interaction.reply({ embeds: [embed] });
-    // }
-    // else if (interaction.commandName === 'setchatchannel') {
-    //     config.ChatChannel = interaction.channelId;
-    //     fs.writeFile(configPath, JSON.stringify(config), err => {
-    //         if (err) return console.log(err);
-    //     });
-
-    //     let embed = new EmbedBuilder()
-    //         .setColor(0xfbf9b9)
-    //         .setTitle('Chat Channel Set!')
-    //         .setDescription('You will now recieve chat messages in this channel!');
-    //     await interaction.reply({ embeds: [embed] });
-    // }

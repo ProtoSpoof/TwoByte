@@ -1,6 +1,5 @@
 const { EmbedBuilder, SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
 
-
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('backup')
@@ -12,7 +11,7 @@ module.exports = {
             .setColor(0x8BD3E6)
             .setTitle('💾 Backing Up...')
             .setDescription('The server will be back in just a minute!');
-        
+
         await interaction.reply({ embeds: [embed] });
         interaction.client.minecraftServer.backup_server();
     },

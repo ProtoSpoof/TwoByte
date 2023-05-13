@@ -1,9 +1,9 @@
 const { EmbedBuilder, Events } = require('discord.js');
 
 module.exports = {
-	name: Events.InteractionCreate,
-	async execute(interaction) {
-		if (!interaction.isChatInputCommand()) return;
+    name: Events.InteractionCreate,
+    async execute(interaction) {
+        if (!interaction.isChatInputCommand()) return;
 
         const command = interaction.client.commands.get(interaction.commandName);
 
@@ -17,7 +17,8 @@ module.exports = {
                 .setColor(0xFF6D6A)
                 .setTitle('❌ Error ❌')
                 .setDescription('There was an error while executing the command... 😰');
+
             await interaction.reply({ embeds: [embed] });
         }
-	},
+    },
 };

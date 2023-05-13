@@ -1,9 +1,9 @@
 const { EmbedBuilder } = require('discord.js');
 
 module.exports = {
-	name: 'exit',
-	once: false,
-	async execute(client, code, signal) {
+    name: 'exit',
+    once: false,
+    async execute(client, code, signal) {
         let embed = new EmbedBuilder();
 
         if (client.minecraftServer.started) {
@@ -20,5 +20,5 @@ module.exports = {
         .setTitle('😕 Server Stopped...')
         .setDescription('I got the server stopped for you!');
         await client.chatChannel?.send({ embeds: [embed] });
-	},
+    },
 };
