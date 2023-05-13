@@ -3,7 +3,7 @@ const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const { MinecraftServer } = require('./MinecraftServer.js');
 const path = require('node:path');
 const fs = require('node:fs');
-
+require('dotenv').config();
 
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
@@ -11,12 +11,9 @@ const eventsPathDiscord = path.join(__dirname, 'events/discord');
 const eventFilesDiscord = fs.readdirSync(eventsPathDiscord).filter(file => file.endsWith('.js'));
 const eventsPathMCServer = path.join(__dirname, 'events/mcserver');
 const eventFilesMCServer = fs.readdirSync(eventsPathMCServer).filter(file => file.endsWith('.js'));
-
-// Config & env variable stuff
-require('dotenv').config();
-
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
-client.commands = new Collection();
+
+client.commands = new Collection(); ->
 client.minecraftServer = new MinecraftServer(SERVER_COMMAND, SERVER_DIRECTORY, SERVER_READY_MESSAGE);
 
 // Load Commands
@@ -33,24 +30,24 @@ for (const file of commandFiles) {
 
 // Load Client Events
 for (const file of eventFilesDiscord) {
-	const filePath = path.join(eventsPathDiscord, file);
-	const event = require(filePath);
-	if (event.once) {
-		client.once(event.name, (...args) => event.execute(...args));
-	} else {
-		client.on(event.name, (...args) => event.execute(...args));
-	}
+    const filePath = path.join(eventsPathDiscord, file);
+    const event = require(filePath);
+    if (event.once) {
+        client.once(event.name, (...args) => event.execute(...args));
+    } else {
+        client.on(event.name, (...args) => event.execute(...args));
+    }
 }
 
 // Load MC Server Events
 for (const file of eventFilesMCServer) {
-	const filePath = path.join(eventsPathMCServer, file);
-	const event = require(filePath);
-	if (event.once) {
-		client.minecraftServer.once(event.name, (...args) => event.execute(client, ...args));
-	} else {
-		client.minecraftServer.on(event.name, (...args) => event.execute(client, ...args));
-	}
+    const filePath = path.join(eventsPathMCServer, file);
+    const event = require(filePath);
+    if (event.once) {
+        client.minecraftServer.once(event.name, (...args) => event.execute(client, ...args));
+    } else {
+        client.minecraftServer.on(event.name, (...args) => event.execute(client, ...args));
+    }
 }
 
 client.login(process.env.TOKEN);

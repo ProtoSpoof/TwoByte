@@ -2,13 +2,12 @@ const { Events } = require('discord.js');
 const { SETTINGS } = require('../../config.js');
 
 module.exports = {
-	name: Events.MessageCreate,
-	async execute(message) {
-        // console.log(message);
-		if (message.author.bot) return
+    name: Events.MessageCreate,
+    async execute(message) {
+        if (message.author.bot) return
         if (message.channelId === SETTINGS.DEVELOPER_CHANNEL) return handleDevMessage(message);
         if (message.channelId === SETTINGS.CHAT_CHANNEL) return handleChatMessage(message);
-	},
+    },
 };
 
 function handleDevMessage(message) {
