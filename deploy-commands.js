@@ -3,8 +3,6 @@ const fs = require('fs');
 require('dotenv').config();
 
 const commands = [];
-
-// Get command files
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
 // Load commands
@@ -13,7 +11,7 @@ for (const file of commandFiles) {
     commands.push(command.data.toJSON());
 }
 
-const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
+const rest = new REST({ version: '10' }).setToken(process.env.BOT_TOKEN);
 
 (async () => {
     try {
